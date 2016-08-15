@@ -72,11 +72,12 @@ class LoginForm extends Model
                 $user->auth_key = Yii::$app->security->generateRandomString();
                 $user->token = Yii::$app->security->generateRandomString() . '_' . time();
 
-                if( $user->save()){
-
-                    return Yii::$app->user->login( $user, $this->rememberMe ? 3600*24*30 : 0);
-                }
             } else {
+
+                $user->token = Yii::$app->security->generateRandomString() . '_' . time();
+            }
+
+            if( $user->save()){
 
                 return Yii::$app->user->login( $user, $this->rememberMe ? 3600*24*30 : 0);
             }
