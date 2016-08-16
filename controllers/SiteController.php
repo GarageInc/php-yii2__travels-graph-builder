@@ -1,9 +1,10 @@
 <?php
 
 namespace app\controllers;
-
+use yii\filters\Cors;
 use Yii;
 use yii\filters\AccessControl;
+use yii\rest\ActiveController;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -11,31 +12,35 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+
+    public $enableCsrfValidation = false;
+
     /**
      * @inheritdoc
      */
     public function behaviors()
     {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
+        $behaviors = parent::behaviors();
+
+        $behaviors['corsFilter'] = [
+            'class' => \yii\filters\Cors::className(),
+            'cors' => [],
+            'actions' => [
+                'login' => [
+                    'Origin' => ['*'],
+                    'Access-Control-Allow-Origin' => ['*'],
+                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                    'Access-Control-Request-Headers' => ['*'],
+                    'Access-Control-Allow-Credentials' => null,
+                    'Access-Control-Max-Age' => 86400,
+                    'Access-Control-Expose-Headers' => [],
                 ],
             ],
         ];
+
+        return $behaviors;
     }
+
 
     /**
      * @inheritdoc
@@ -77,11 +82,14 @@ class SiteController extends Controller
     {
         $model = new LoginForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return Yii::$app->user->getId();
+        $token = "bla";
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $token = $model->login();
         }
 
-        return false;
+        return $token;
     }
 //
 //    /**

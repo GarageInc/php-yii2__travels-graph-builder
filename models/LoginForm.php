@@ -79,11 +79,13 @@ class LoginForm extends Model
 
             if( $user->save()){
 
-                return Yii::$app->user->login( $user, $this->rememberMe ? 3600*24*30 : 0);
+                Yii::$app->user->login( $user, $this->rememberMe ? 3600*24*30 : 0);
+
+                return $user->token;
             }
         }
 
-        return false;
+        return "";
     }
 
     /**
