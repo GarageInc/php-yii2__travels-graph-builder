@@ -11,7 +11,7 @@ use yii\base\Model;
  * @property User|null $user This property is read-only.
  *
  */
-class LoginForm extends Model
+class IdentityModel extends Model
 {
     public $username;
     public $password;
@@ -19,10 +19,6 @@ class LoginForm extends Model
 
     private $_user = false;
 
-
-    /**
-     * @return array the validation rules.
-     */
     public function rules()
     {
         return [
@@ -35,13 +31,6 @@ class LoginForm extends Model
         ];
     }
 
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
-     */
     public function validatePassword($attribute, $params)
     {
         if ( !$this->hasErrors()) {
@@ -53,14 +42,15 @@ class LoginForm extends Model
         }
     }
 
-    /**
-     * Logs in a user using the provided username and password.
-     * @return boolean whether the user is logged in successfully
-     */
     public function login()
     {
         $user = $this->getUser();
 
+        $salt = Yii::$app->security->generateRandomString(10);
+
+        $token = "blablabla";
+
+//
         if ( $this->validate()) {
 
             if( $user == null){
@@ -69,23 +59,20 @@ class LoginForm extends Model
 
                 $user->username = $this->username;
                 $user->password = (Yii::$app->security->generatePasswordHash( $this->password));
-                $user->auth_key = Yii::$app->security->generateRandomString();
-                $user->token = Yii::$app->security->generateRandomString() . '_' . time();
-
-            } else {
-
-                $user->token = Yii::$app->security->generateRandomString() . '_' . time();
             }
+
+            $user->auth_key = Yii::$app->security->generateRandomString();
+            $user->token =  $salt. ':' . Yii::$app->security->generatePasswordHash($salt . $user->getAuthKey());
 
             if( $user->save()){
 
                 Yii::$app->user->login( $user, $this->rememberMe ? 3600*24*30 : 0);
 
-                return $user->token;
+                $token = $user->token;
             }
         }
 
-        return "";
+        return $token;
     }
 
     /**
