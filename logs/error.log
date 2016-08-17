@@ -1,0 +1,28 @@
+[Wed Aug 17 11:57:36.977878 2016] [:error] [pid 7216:tid 1036] [client 127.0.0.1:55660] PHP Deprecated:  Automatically populating $HTTP_RAW_POST_DATA is deprecated and will be removed in a future version. To avoid this warning set 'always_populate_raw_post_data' to '-1' in php.ini and use the php://input stream instead. in Unknown on line 0, referer: http://localhost:3001/login
+[Wed Aug 17 11:57:36.977878 2016] [:error] [pid 7216:tid 1036] [client 127.0.0.1:55660] PHP Warning:  Cannot modify header information - headers already sent in Unknown on line 0, referer: http://localhost:3001/login
+[Wed Aug 17 12:00:31.766203 2016] [mpm_winnt:notice] [pid 8780:tid 580] AH00424: Parent: Received restart signal -- Restarting the server.
+AH00526: Syntax error on line 233 of C:/Apache24/conf/httpd.conf:
+Invalid command 'Header', perhaps misspelled or defined by a module not included in the server configuration
+[Wed Aug 17 12:00:33.767499 2016] [mpm_winnt:notice] [pid 7216:tid 592] AH00364: Child: All worker threads have exited.
+Starting the 'Apache2.4' service
+The 'Apache2.4' service is running.
+ore:warn] [pid 10064:tid 500] AH00098: pid file C:/Apache24/logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Wed Aug 17 12:03:39.792549 2016] [mpm_winnt:notice] [pid 10064:tid 500] AH00455: Apache/2.4.23 (Win64) PHP/5.6.24 configured -- resuming normal operations
+[Wed Aug 17 12:03:39.792549 2016] [mpm_winnt:notice] [pid 10064:tid 500] AH00456: Apache Lounge VC14 Server built: Jul  1 2016 11:43:51
+[Wed Aug 17 12:03:39.792549 2016] [core:notice] [pid 10064:tid 500] AH00094: Command line: 'C:\\Apache24\\bin\\httpd.exe -d C:/Apache24'
+[Wed Aug 17 12:03:39.794550 2016] [mpm_winnt:notice] [pid 10064:tid 500] AH00418: Parent: Created child process 3200
+[Wed Aug 17 12:03:40.128822 2016] [mpm_winnt:notice] [pid 3200:tid 568] AH00354: Child: Starting 64 worker threads.
+[Wed Aug 17 12:03:44.582950 2016] [mpm_winnt:notice] [pid 10064:tid 500] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Wed Aug 17 12:03:46.585159 2016] [mpm_winnt:notice] [pid 3200:tid 568] AH00364: Child: All worker threads have exited.
+[Wed Aug 17 12:03:46.618684 2016] [mpm_winnt:notice] [pid 10064:tid 500] AH00430: Parent: Child process 3200 exited successfully.
+Starting the 'Apache2.4' service
+The 'Apache2.4' service is running.
+pm_winnt:notice] [pid 2728:tid 600] AH00455: Apache/2.4.23 (Win64) PHP/5.6.24 configured -- resuming normal operations
+[Wed Aug 17 12:06:43.232193 2016] [mpm_winnt:notice] [pid 2728:tid 600] AH00456: Apache Lounge VC14 Server built: Jul  1 2016 11:43:51
+[Wed Aug 17 12:06:43.232193 2016] [core:notice] [pid 2728:tid 600] AH00094: Command line: 'C:\\Apache24\\bin\\httpd.exe -d C:/Apache24'
+[Wed Aug 17 12:06:43.234191 2016] [mpm_winnt:notice] [pid 2728:tid 600] AH00418: Parent: Created child process 1572
+[Wed Aug 17 12:06:43.674838 2016] [mpm_winnt:notice] [pid 1572:tid 428] AH00354: Child: Starting 64 worker threads.
+[Wed Aug 17 12:07:17.739556 2016] [:error] [pid 1572:tid 1036] [client 127.0.0.1:55793] PHP Deprecated:  Automatically populating $HTTP_RAW_POST_DATA is deprecated and will be removed in a future version. To avoid this warning set 'always_populate_raw_post_data' to '-1' in php.ini and use the php://input stream instead. in Unknown on line 0, referer: http://localhost:3001/login
+[Wed Aug 17 12:07:17.739556 2016] [:error] [pid 1572:tid 1036] [client 127.0.0.1:55793] PHP Warning:  Cannot modify header information - headers already sent in Unknown on line 0, referer: http://localhost:3001/login
+[Wed Aug 17 12:11:03.826503 2016] [:error] [pid 1572:tid 1040] [client 127.0.0.1:55896] PHP Deprecated:  Automatically populating $HTTP_RAW_POST_DATA is deprecated and will be removed in a future version. To avoid this warning set 'always_populate_raw_post_data' to '-1' in php.ini and use the php://input stream instead. in Unknown on line 0, referer: http://127.0.0.1:3001/login
+[Wed Aug 17 12:11:03.826503 2016] [:error] [pid 1572:tid 1040] [client 127.0.0.1:55896] PHP Warning:  Cannot modify header information - headers already sent in Unknown on line 0, referer: http://127.0.0.1:3001/login

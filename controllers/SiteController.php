@@ -1,17 +1,24 @@
 <?php
 
 namespace app\controllers;
+use app\models\IdentityModel;
 use yii\filters\Cors;
 use Yii;
 use yii\filters\AccessControl;
 use yii\rest\ActiveController;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
+
 use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+
+    public $username;
+    public $password;
+    public $rememberMe = true;
+
+    private $_user = false;
 
     public $enableCsrfValidation = false;
 
@@ -80,14 +87,16 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        $model = new LoginForm();
+        $model = new IdentityModel();
 
-        $token = "bla";
+        $token = "blablabla";
 
         if ($model->load(Yii::$app->request->post())) {
 
             $token = $model->login();
         }
+
+        return Yii::$app->user->isGuest;
 
         return $token;
     }
