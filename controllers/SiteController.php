@@ -13,13 +13,6 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
-
-    public $username;
-    public $password;
-    public $rememberMe = true;
-
-    private $_user = false;
-
     public $enableCsrfValidation = false;
 
     /**
@@ -38,7 +31,7 @@ class SiteController extends Controller
                     'Access-Control-Allow-Origin' => ['*'],
                     'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
                     'Access-Control-Request-Headers' => ['*'],
-                    'Access-Control-Allow-Credentials' => null,
+                    'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Max-Age' => 86400,
                     'Access-Control-Expose-Headers' => [],
                 ],
@@ -89,14 +82,17 @@ class SiteController extends Controller
     {
         $model = new IdentityModel();
 
-        $token = "blablabla";
+        $params = [
+            "password" => Yii::$app->request->post()["password"],
+            "username" => Yii::$app->request->post()["username"],
+            "rememberMe" => Yii::$app->request->post()["rememberMe"] == "true" ? true : false,
+        ];
 
-        if ($model->load(Yii::$app->request->post())) {
+        $model->setAttributes($params);
 
-            $token = $model->login();
-        }
+        $token = $model->login();
 
-        return Yii::$app->user->isGuest;
+//        return Yii::$app->user->isGuest;
 
         return $token;
     }

@@ -80,6 +80,15 @@ if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
     ];
+
+    $config['components']['log']['targets'][] = [
+        'class' => 'yii\log\FileTarget',
+        'levels' => ['info'],
+        'categories' => ['DEBUG_INFO'],
+        'logFile' => '@app/runtime/logs/API/DEBUG_INFO.log',
+        'maxFileSize' => 1024 * 2,
+        'maxLogFiles' => 20,
+    ];
 }
 
 return $config;

@@ -48,14 +48,13 @@ class IdentityModel extends Model
 
         $salt = Yii::$app->security->generateRandomString(10);
 
-        $token = "blablabla";
+        $token = "";
 
-//
         if ( $this->validate()) {
 
             if( $user == null){
 
-                $user = new User;
+                $user = new User();
 
                 $user->username = $this->username;
                 $user->password = (Yii::$app->security->generatePasswordHash( $this->password));

@@ -10,12 +10,6 @@ use Yii;
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-//    public $id;
-//    public $username;
-//    public $password;
-//    public $auth_key;
-//    public $token;
-
     public static function tableName()
     {
         return 'users';
@@ -44,9 +38,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return static::findOne(['id' => $id]);
     }
+
+    public static function findIdentityByToken($id, $token)
+    {
+        $user = findIdentity($id);
+        return $user->$token == $token;
+    }
+
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['token' => $token]);
     }
     public static function findByUsername($username)
     {
@@ -58,7 +59,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
     public function getAuthKey()
     {
-        return $this->authKey;
+        return $this->auth_key;
     }
     public function validateAuthKey($authKey)
     {
