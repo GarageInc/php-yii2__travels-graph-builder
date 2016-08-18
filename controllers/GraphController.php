@@ -3,12 +3,14 @@
 namespace app\controllers;
 
 use app\models\Node;
+use app\models\User;
 use app\pathfinders\DijkstraAlgorithm;
 use Yii;
 use app\models\Graph;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -19,7 +21,6 @@ use yii\web\Response;
  */
 class GraphController  extends ActiveController
 {
-    // указываем класс модели, который будет использоваться
     public $modelClass = 'app\models\Graph';
 
     /**
@@ -30,12 +31,12 @@ class GraphController  extends ActiveController
 
         return
             \yii\helpers\ArrayHelper::merge(parent::behaviors(),  [
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//                    'delete' => ['POST'],
-//                ],
-//            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
 //
 //            'acess' => [
 //                'class' => AccessControl::className(),
@@ -58,6 +59,41 @@ class GraphController  extends ActiveController
             ],
         ]);
     }
+
+    public function actions()
+    {
+        $actions = parent::actions();
+
+        $actions['index']['prepareDataProvider'] = [$this, 'pDPIndex'];
+
+        return $actions;
+    }
+
+    public function checkAccess($action, $model = null, $params = [])
+    {
+        $user_id =  Yii::$app->request->post('id', Yii::$app->request->get('id', -1));
+        $pub_token =  Yii::$app->request->post('pub_token', Yii::$app->request->get('pub_token', -1));
+
+        $selectedUser = User::findIdentity( $user_id);
+
+        if( !$selectedUser || !$selectedUser->validateToken($pub_token))
+            throw new ForbiddenHttpException();
+        return
+            true;
+    }
+
+
+    public function pDPIndex()
+    {
+        $user_id =  Yii::$app->request->post('id', Yii::$app->request->get('id', -1));
+
+        $dataProvider =  Graph::find()->where(['user_id' => $user_id])->all();
+
+        Yii::info( $dataProvider, 'DEBUG_INFO');
+
+        return json_encode( $dataProvider);
+
+    }
 //
 //    public static function isValidGraph($graph){
 //
@@ -74,19 +110,13 @@ class GraphController  extends ActiveController
 //     */
 //    public function actionIndex()
 //    {
-//        if ( Yii::$app->user->isGuest) {
-//            return $this->goBack();
-//        }
-//
-//        $userId = Yii::$app->user->identity->id;
-//
 //        $dataProvider = new ActiveDataProvider([
-//            'query' => Graph::find()->where(['user_id' => $userId])
+//            'query' => Graph::find()->where(['user_id' => 1])
 //        ]);
 //
-//        return $this->render('index', [
-//            'dataProvider' => $dataProvider,
-//        ]);
+//        Yii::info( $dataProvider, 'DEBUG_INFO');
+//
+//        return json_encode([]);
 //    }
 //
 //    /**

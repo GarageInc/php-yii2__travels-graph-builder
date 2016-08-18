@@ -25,7 +25,7 @@ class IdentityModel extends Model
             // username and password are both required
             [['username', 'password'], 'required'],
             // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
+//            ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
@@ -48,8 +48,6 @@ class IdentityModel extends Model
 
         $salt = Yii::$app->security->generateRandomString(10);
 
-        $token = "";
-
         if ( $this->validate()) {
 
             if( $user == null){
@@ -58,20 +56,25 @@ class IdentityModel extends Model
 
                 $user->username = $this->username;
                 $user->password = (Yii::$app->security->generatePasswordHash( $this->password));
-            }
+            }// pass
 
             $user->auth_key = Yii::$app->security->generateRandomString();
             $user->token =  $salt. ':' . Yii::$app->security->generatePasswordHash($salt . $user->getAuthKey());
 
+
             if( $user->save()){
 
-                Yii::$app->user->login( $user, $this->rememberMe ? 3600*24*30 : 0);
+                // yii login not user
+//                Yii::$app->user->login( $user, (!!$this->rememberMe) ? 3600*24*30 : 0);
 
-                $token = $user->token;
-            }
+                return [
+                    "id" => $user->id ,
+                    "pub_token" => $user->token
+                ];
+            }// pass
+        } else {
+            return $this->getErrors();
         }
-
-        return $token;
     }
 
     /**

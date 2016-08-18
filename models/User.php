@@ -7,6 +7,9 @@ use Yii;
 
 /**
  * @property string token
+ * @property string password
+ * @property string username
+ * @property string auth_key
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -60,6 +63,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getAuthKey()
     {
         return $this->auth_key;
+    }
+    public function getToken()
+    {
+        return $this->token;
+    }
+    public function validateToken($token)
+    {
+        return $this->getToken() === $token;
     }
     public function validateAuthKey($authKey)
     {

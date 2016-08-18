@@ -26,3 +26,15 @@ pm_winnt:notice] [pid 2728:tid 600] AH00455: Apache/2.4.23 (Win64) PHP/5.6.24 co
 [Wed Aug 17 12:07:17.739556 2016] [:error] [pid 1572:tid 1036] [client 127.0.0.1:55793] PHP Warning:  Cannot modify header information - headers already sent in Unknown on line 0, referer: http://localhost:3001/login
 [Wed Aug 17 12:11:03.826503 2016] [:error] [pid 1572:tid 1040] [client 127.0.0.1:55896] PHP Deprecated:  Automatically populating $HTTP_RAW_POST_DATA is deprecated and will be removed in a future version. To avoid this warning set 'always_populate_raw_post_data' to '-1' in php.ini and use the php://input stream instead. in Unknown on line 0, referer: http://127.0.0.1:3001/login
 [Wed Aug 17 12:11:03.826503 2016] [:error] [pid 1572:tid 1040] [client 127.0.0.1:55896] PHP Warning:  Cannot modify header information - headers already sent in Unknown on line 0, referer: http://127.0.0.1:3001/login
+[Wed Aug 17 16:55:59.542175 2016] [:error] [pid 1572:tid 1040] [client 127.0.0.1:53251] PHP Parse error:  syntax error, unexpected '$user' (T_VARIABLE) in C:\\data\\php.sudo-rm-rf.ru\\models\\IdentityModel.php on line 58, referer: http://localhost:3001/login
+[Wed Aug 17 17:43:40.452229 2016] [mpm_winnt:notice] [pid 2728:tid 600] AH00422: Parent: Received shutdown signal -- Shutting down the server.
+[Wed Aug 17 17:43:42.471431 2016] [mpm_winnt:notice] [pid 1572:tid 428] AH00364: Child: All worker threads have exited.
+[Wed Aug 17 17:43:42.518306 2016] [mpm_winnt:notice] [pid 2728:tid 600] AH00430: Parent: Child process 1572 exited successfully.
+[Thu Aug 18 09:39:59.257667 2016] [mpm_winnt:notice] [pid 2100:tid 584] AH00455: Apache/2.4.23 (Win64) PHP/5.6.24 configured -- resuming normal operations
+[Thu Aug 18 09:39:59.257667 2016] [mpm_winnt:notice] [pid 2100:tid 584] AH00456: Apache Lounge VC14 Server built: Jul  1 2016 11:43:51
+[Thu Aug 18 09:39:59.257667 2016] [core:notice] [pid 2100:tid 584] AH00094: Command line: 'C:\\Apache24\\bin\\httpd.exe -d C:/Apache24'
+[Thu Aug 18 09:39:59.257667 2016] [mpm_winnt:notice] [pid 2100:tid 584] AH00418: Parent: Created child process 3820
+[Thu Aug 18 09:39:59.976427 2016] [mpm_winnt:notice] [pid 3820:tid 548] AH00354: Child: Starting 64 worker threads.
+[Thu Aug 18 15:00:44.109724 2016] [:error] [pid 3820:tid 1036] [client 127.0.0.1:49377] PHP Parse error:  syntax error, unexpected '}' in C:\\data\\php.sudo-rm-rf.ru\\controllers\\GraphController.php on line 88, referer: http://localhost:3001/dashboard
+[Thu Aug 18 17:44:45.482152 2016] [:error] [pid 3820:tid 472] [client 127.0.0.1:55651] PHP Fatal error:  Call to a member function getToken() on null in C:\\data\\php.sudo-rm-rf.ru\\controllers\\GraphController.php on line 82, referer: http://localhost:3001/dashboard
+[Thu Aug 18 17:50:34.429699 2016] [:error] [pid 3820:tid 472] [client 127.0.0.1:55803] PHP Fatal error:  Class 'app\\controllers\\Edge' not found in C:\\data\\php.sudo-rm-rf.ru\\controllers\\GraphController.php on line 91, referer: http://localhost:3001/dashboard

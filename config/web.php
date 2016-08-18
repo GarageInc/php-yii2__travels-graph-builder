@@ -14,12 +14,13 @@ $config = [
         'urlManager' => [
             'class'=>'yii\web\UrlManager',
             'enablePrettyUrl' => true,
+//            'enableStrictParsing' => true,
 //            'showScriptName' => false,
 //
             'rules' => [
 //                '' => 'site/index',
 //                '<action>'=>'site/<action>',
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['film','actor','genre']],
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['user','graph','node','edge']],
             ],
         ],
         'request' => [

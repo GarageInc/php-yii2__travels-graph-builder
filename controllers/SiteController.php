@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 
 use app\models\ContactForm;
+use yii\web\HttpException;
 
 class SiteController extends Controller
 {
@@ -90,11 +91,14 @@ class SiteController extends Controller
 
         $model->setAttributes($params);
 
-        $token = $model->login();
+        $params = $model->login();
 
-//        return Yii::$app->user->isGuest;
-
-        return $token;
+        // каша, пересмотреть
+        if( $params ){
+            return json_encode($params );
+        } else {
+            throw new HttpException("401");
+        }
     }
 //
 //    /**
