@@ -55,12 +55,11 @@ class IdentityModel extends Model
                 $user = new User();
 
                 $user->username = $this->username;
-                $user->password = (Yii::$app->security->generatePasswordHash( $this->password));
+                $user->password = ( Yii::$app->security->generatePasswordHash( $this->password));
             }// pass
 
             $user->auth_key = Yii::$app->security->generateRandomString();
-            $user->token =  $salt. ':' . Yii::$app->security->generatePasswordHash($salt . $user->getAuthKey());
-
+            $user->token =  Yii::$app->security->generatePasswordHash( $salt . $user->getAuthKey());
 
             if( $user->save()){
 
