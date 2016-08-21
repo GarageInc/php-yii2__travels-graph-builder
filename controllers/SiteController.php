@@ -46,10 +46,6 @@ class SiteController extends Controller
         return $behaviors;
     }
 
-
-    /**
-     * @inheritdoc
-     */
     public function actions()
     {
         return [
@@ -62,53 +58,33 @@ class SiteController extends Controller
             ],
         ];
     }
-//
-//    /**
-//     * Displays homepage.
-//     *
-//     * @return string
-//     */
-//    public function actionIndex()
-//    {
-//
-//        if ( Yii::$app->user->isGuest) {
-//            return $this::actionLogin();
-//        }
-//
-//        return "blablabla";
-//    }
 
-    /**
-     * Login action.
-     *
-     * @return string
-     */
     public function actionLogin()
     {
 //        $opensslConfigPath = "C:/data/php.sudo-rm-rf.ru/openssl.cnf";
 
-        $config = array(
-//            "config" => $opensslConfigPath,
-            "digest_alg" => "sha512",
-            "private_key_bits" => 4096,
-            "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
-
-        $res = openssl_pkey_new($config);
-
-//        $res =  openssl_error_string ( );
-//        return json_encode($res);
-
-        openssl_pkey_export($res, $privKey);
-
-        $pubKey = openssl_pkey_get_details($res);
-        $pubKey = $pubKey["key"];
-
-        $data = 'plaintext data goes here';
-
-        openssl_public_encrypt($data, $encrypted, $pubKey);
-
-        openssl_private_decrypt($encrypted, $decrypted, $privKey);
+//        $config = array(
+////            "config" => $opensslConfigPath,
+//            "digest_alg" => "sha512",
+//            "private_key_bits" => 4096,
+//            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+//        );
+//
+//        $res = openssl_pkey_new($config);
+//
+////        $res =  openssl_error_string ( );
+////        return json_encode($res);
+//
+//        openssl_pkey_export($res, $privKey);
+//
+//        $pubKey = openssl_pkey_get_details($res);
+//        $pubKey = $pubKey["key"];
+//
+//        $data = 'plaintext data goes here';
+//
+//        openssl_public_encrypt($data, $encrypted, $pubKey);
+//
+//        openssl_private_decrypt($encrypted, $decrypted, $privKey);
 
 //        $rsa = new Crypt_RSA();
 //
@@ -119,14 +95,14 @@ class SiteController extends Controller
 //
 //        $encrypted =  $rsa->encrypt("plaintext data goes here");
 //        $decrypted =  $rsa->decrypt($encrypted);
-
-        return json_encode([
-            "data" => "plaintext data goes here",
-//            "pub_key" => $publickey,
-//            "priv_key" => $privatekey,
-            "encrypted" => $encrypted,
-            "decrypted" => $decrypted
-        ]);
+//
+//        return json_encode([
+//            "data" => "plaintext data goes here",
+////            "pub_key" => $publickey,
+////            "priv_key" => $privatekey,
+//            "encrypted" => $encrypted,
+//            "decrypted" => $decrypted
+//        ]);
 
 
         $model = new IdentityModel();
@@ -143,7 +119,7 @@ class SiteController extends Controller
 
         // каша, пересмотреть
         if( $params ){
-            return json_encode($params );
+            return $params;
         } else {
             throw new HttpException("401");
         }
