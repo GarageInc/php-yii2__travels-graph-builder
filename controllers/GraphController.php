@@ -19,13 +19,11 @@ use yii\web\Response;
 /**
  * GraphController implements the CRUD actions for Graph model.
  */
-class GraphController  extends ActiveController
+class GraphController  extends Controller
 {
-    public $modelClass = 'app\models\Graph';
+    public $enableCsrfValidation = false;
+//    public $modelClass = 'app\models\Graph';
 
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
 
@@ -37,38 +35,32 @@ class GraphController  extends ActiveController
                     'delete' => ['POST'],
                 ],
             ],
-//
-//            'acess' => [
-//                'class' => AccessControl::className(),
-//                'only' => ['index', 'create', 'update', 'build'],
-//                'rules' => [
-//                    [
-//                        'allow' => true,
-//                        'actions' => [],
-//                        'roles' => ['@'],
-//                    ],
-//                    [
-//                        'allow' => false,
-//                        'actions' => ['index', 'create', 'update', 'build'],
-//                        'roles' => ['?'],
-//                    ],
-//                ],
-//            ],
             'corsFilter' => [
                 'class' => \yii\filters\Cors::className(),
-            ],
+                'cors' => [],
+                'actions' => [
+                    'login' => [
+                        'Origin' => ['*'],
+                        'Access-Control-Allow-Origin' => ['*'],
+                        'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                        'Access-Control-Request-Headers' => ['*'],
+                        'Access-Control-Allow-Credentials' => true,
+                        'Access-Control-Max-Age' => 86400,
+                        'Access-Control-Expose-Headers' => [],
+                    ],
+                ],
+            ]
         ]);
     }
 
-    public function actions()
-    {
-        $actions = parent::actions();
-
-        $actions['index']['prepareDataProvider'] = [$this, 'pDPIndex'];
-        $actions['index']['prepareDataProvider'] = [$this, 'pDPIndex'];
-
-        return $actions;
-    }
+//    public function actions()
+//    {
+//        $actions = parent::actions();
+//
+//        $actions['index']['prepareDataProvider'] = [$this, 'pDPIndex'];
+//
+//        return $actions;
+//    }
 
 
     public function getUserId(){
@@ -76,7 +68,7 @@ class GraphController  extends ActiveController
         return $user_id =  Yii::$app->request->post('id', Yii::$app->request->get('id', -1));;
     }
 
-    public function checkAccess($action, $model = null, $params = [])
+    public function beforeAction($action)
     {
         $user_id =  self::getUserId();
         $pub_token =  Yii::$app->request->post('pub_token', Yii::$app->request->get('pub_token', -1));
@@ -91,29 +83,34 @@ class GraphController  extends ActiveController
 
     // prepareDataProviders
 
-    public function pDPIndex()
+    public function actionIndex()
     {
         $user_id =  self::getUserId();
 
         $dataProvider =  Graph::find()->where(['user_id' => $user_id])->all();
 
-        Yii::info( $dataProvider, 'DEBUG_INFO');
+        $models = self::convertModelToArray($dataProvider, ["user_id", "graphname", "id"]);
 
-        return  $dataProvider;
+        return  json_encode($models);
     }
 
-//    public function actionCreate()
-//    {
-//        $model = new Graph();
-//
-//        $userId = $this->getUserId();;
-//
-//        $model->load(Yii::$app->request->post());
-//
-//        $model->user_id = $userId;
-//
-//        return self::isValidGraph($model) && $model->save();
-//    }
+    public function actionCreate()
+    {
+        $model = new Graph();
+
+        $userId = $this->getUserId();;
+
+        $params = [
+            "user_id" => $userId,
+            "graphname" => Yii::$app->request->post()["graphname"],
+        ];
+
+        $model->setAttributes( $params);
+
+        $result = self::isValidGraph($model) && $model->save();
+
+        return json_encode($result);
+    }
 //
 //    public function actionUpdate($id)
 //    {
@@ -164,8 +161,8 @@ class GraphController  extends ActiveController
         $nodes = $graph->getNodes()->all();
         $edges = $graph->getEdges()->all();
 
-
         $result = [
+            "graphname" => $graph->graphname,
             "nodes" => $this::convertModelToArray($nodes, ["id", "nodename"]),
             "edges" => $this::convertModelToArray($edges, ["id", 'node_first_id', 'node_second_id', 'weight'])
         ];
@@ -203,14 +200,14 @@ class GraphController  extends ActiveController
         return false;
     }
 
-    protected function findModel($id)
+    protected function findModel( $id)
     {
-        $model = Graph::findOne($id);
+        $model = Graph::findOne( $id);
 
         if ( $model!== null && $model->user_id == self::getUserId()) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested graph does not exist.');
+            throw new NotFoundHttpException('The requested graph does not exist by id = ' . $id);
         }
     }
     public function convertModelToArray($models, $fields) {

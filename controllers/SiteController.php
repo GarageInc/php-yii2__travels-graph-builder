@@ -6,6 +6,7 @@ include('../crypt/RSA.php');
 
 use app\models\IdentityModel;
 use Crypt_RSA;
+use yii\filters\ContentNegotiator;
 use yii\filters\Cors;
 use Yii;
 use yii\filters\AccessControl;
@@ -15,6 +16,7 @@ use yii\filters\VerbFilter;
 
 use app\models\ContactForm;
 use yii\web\HttpException;
+use yii\web\Response;
 
 class SiteController extends Controller
 {
@@ -45,7 +47,6 @@ class SiteController extends Controller
 
         return $behaviors;
     }
-
     public function actions()
     {
         return [
@@ -119,27 +120,9 @@ class SiteController extends Controller
 
         // каша, пересмотреть
         if( $params ){
-            return $params;
+            return json_encode( $params);
         } else {
             throw new HttpException("401");
         }
-    }
-//
-//    /**
-//     * Logout action.
-//     *
-//     * @return string
-//     */
-//    public function actionLogout()
-//    {
-//        Yii::$app->user->logout();
-//
-//        return $this->goHome();
-//    }
-
-
-    public function actionIndex()
-    {
-        return $this->renderContent(null);
     }
 }
