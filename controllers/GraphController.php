@@ -123,6 +123,18 @@ class GraphController  extends Controller
 //        }
 //    }
 
+    public function actionSave()
+    {
+        $graph_id = Yii::$app->request->post()["graph_id"];
+        $graphname = Yii::$app->request->post()["graphname"];
+
+        $model = $this->findModel( $graph_id);
+
+        $model->graphname = $graphname;
+
+        return $model->save();
+    }
+
 
     public function actionBuild( $id)
     {
@@ -156,12 +168,13 @@ class GraphController  extends Controller
 
     public function actionStructure( $graph_id )
     {
-        $graph = $this::findModel($graph_id);
+        $graph = $this::findModel( $graph_id);
 
         $nodes = $graph->getNodes()->all();
         $edges = $graph->getEdges()->all();
 
         $result = [
+            "id" => $graph_id,
             "graphname" => $graph->graphname,
             "nodes" => $this::convertModelToArray($nodes, ["id", "nodename"]),
             "edges" => $this::convertModelToArray($edges, ["id", 'node_first_id', 'node_second_id', 'weight'])
