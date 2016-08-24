@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-include('../crypt/RSA.php');
 
 use app\models\IdentityModel;
 use Crypt_RSA;
@@ -14,50 +13,22 @@ use yii\rest\ActiveController;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 
+use app\controllers\base\BaseController;
 use app\models\ContactForm;
 use yii\web\HttpException;
 use yii\web\Response;
 
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     public $enableCsrfValidation = false;
 
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
 
-        $behaviors['corsFilter'] = [
-            'class' => \yii\filters\Cors::className(),
-            'cors' => [],
-            'actions' => [
-                'login' => [
-                    'Origin' => ['*'],
-                    'Access-Control-Allow-Origin' => ['*'],
-                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-                    'Access-Control-Request-Headers' => ['*'],
-                    'Access-Control-Allow-Credentials' => true,
-                    'Access-Control-Max-Age' => 86400,
-                    'Access-Control-Expose-Headers' => [],
-                ],
-            ],
-        ];
-
-        return $behaviors;
-    }
-    public function actions()
+    public function beforeAction($action)
     {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
+        return true;
     }
 
     public function actionLogin()

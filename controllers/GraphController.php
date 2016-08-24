@@ -16,42 +16,14 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Response;
+use app\controllers\base\BaseController;
+
 /**
  * GraphController implements the CRUD actions for Graph model.
  */
-class GraphController  extends Controller
+class GraphController  extends BaseController
 {
-    public $enableCsrfValidation = false;
-//    public $modelClass = 'app\models\Graph';
 
-    public function behaviors()
-    {
-
-        return
-            \yii\helpers\ArrayHelper::merge(parent::behaviors(),  [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-            'corsFilter' => [
-                'class' => \yii\filters\Cors::className(),
-                'cors' => [],
-                'actions' => [
-                    'login' => [
-                        'Origin' => ['*'],
-                        'Access-Control-Allow-Origin' => ['*'],
-                        'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-                        'Access-Control-Request-Headers' => ['*'],
-                        'Access-Control-Allow-Credentials' => true,
-                        'Access-Control-Max-Age' => 86400,
-                        'Access-Control-Expose-Headers' => [],
-                    ],
-                ],
-            ]
-        ]);
-    }
 
 //    public function actions()
 //    {
@@ -63,23 +35,6 @@ class GraphController  extends Controller
 //    }
 
 
-    public function getUserId(){
-
-        return $user_id =  Yii::$app->request->post('id', Yii::$app->request->get('id', -1));;
-    }
-
-    public function beforeAction($action)
-    {
-        $user_id =  self::getUserId();
-        $pub_token =  Yii::$app->request->post('pub_token', Yii::$app->request->get('pub_token', -1));
-
-        $selectedUser = User::findIdentity( $user_id);
-
-        if( !$selectedUser || !$selectedUser->validateToken($pub_token))
-            throw new ForbiddenHttpException();
-        return
-            true;
-    }
 
     // prepareDataProviders
 
@@ -222,22 +177,6 @@ class GraphController  extends Controller
         } else {
             throw new NotFoundHttpException('The requested graph does not exist by id = ' . $id);
         }
-    }
-    public function convertModelToArray($models, $fields) {
-
-        $result = array();
-
-        foreach ($models as $model) {
-            $row = array();
-
-            foreach ($fields as $field){
-                $row[$field] = $model->getAttribute( $field);
-            }
-
-            array_push($result, $row);
-        }
-
-        return $result;
     }
 
 }

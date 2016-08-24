@@ -10,41 +10,12 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\controllers\base\BaseController;
 /**
  * EdgeController implements the CRUD actions for Edge model.
  */
-class EdgeController extends Controller
+class EdgeController extends BaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-
-            ],
-
-            'acess' => [
-                'class' => AccessControl::className(),
-                'only' => ['delete', 'create'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => [],
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'allow' => false,
-                        'actions' => ['delete', 'create'],
-                        'roles' => ['?'],
-                    ],
-                ],
-            ],
-        ];
-    }
 //
 //    /**
 //     * Lists all Edge models.
@@ -89,9 +60,10 @@ class EdgeController extends Controller
             throw new Exception("Error with unhandled edge!");
         }
 
-        $model->save();
-
-        return $model->getPrimaryKey();
+        if($model->save())
+            return json_encode($model);
+        else
+            throw new Exception();
     }
 //
 //    /**
@@ -121,9 +93,7 @@ class EdgeController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return "blablabla";
+        return $this->findModel($id)->delete();
     }
 
     /**

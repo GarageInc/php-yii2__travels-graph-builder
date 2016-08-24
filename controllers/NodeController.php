@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\controllers\base\BaseController;
 use app\models\Edge;
 use Yii;
 use app\models\Node;
+use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -14,36 +16,9 @@ use yii\filters\VerbFilter;
 /**
  * NodeController implements the CRUD actions for Node model.
  */
-class NodeController extends Controller
+class NodeController extends BaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-//            'verbs' => [
-//                'class' => VerbFilter::className()
-//            ],
-//
-//            'acess' => [
-//                'class' => AccessControl::className(),
-//                'only' => ['delete', 'create'],
-//                'rules' => [
-//                    [
-//                        'allow' => true,
-//                        'actions' => [],
-//                        'roles' => ['@'],
-//                    ],
-//                    [
-//                        'allow' => false,
-//                        'actions' => ['delete', 'create'],
-//                        'roles' => ['?'],
-//                    ],
-//                ],
-//            ],
-        ];
-    }
+
 
 //    /**
 //     * Lists all Node models.
@@ -86,9 +61,13 @@ class NodeController extends Controller
         $model->nodename = Yii::$app->request->post("nodename");
         $model->graph_id = Yii::$app->request->post("graph_id");
 
-        $model->save();
-
-        return $model->getPrimaryKey();
+        if( $model->save())
+            return json_encode([
+                'id' => $model->id,
+                'nodename' => $model->nodename
+            ]);
+        else
+            throw new Exception();
     }
 //
 //    /**
