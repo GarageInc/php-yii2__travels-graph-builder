@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Graph;
 use Yii;
 use app\models\Edge;
 use yii\base\Exception;
@@ -11,38 +12,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\controllers\base\BaseController;
-/**
- * EdgeController implements the CRUD actions for Edge model.
- */
+
 class EdgeController extends BaseController
 {
-//
-//    /**
-//     * Lists all Edge models.
-//     * @return mixed
-//     */
-//    public function actionIndex()
-//    {
-//        $dataProvider = new ActiveDataProvider([
-//            'query' => Edge::find(),
-//        ]);
-//
-//        return $this->render('index', [
-//            'dataProvider' => $dataProvider,
-//        ]);
-//    }
-//
-//    /**
-//     * Displays a single Edge model.
-//     * @param integer $id
-//     * @return mixed
-//     */
-//    public function actionView($id)
-//    {
-//        return $this->render('view', [
-//            'model' => $this->findModel($id),
-//        ]);
-//    }
+
 
 
     public function actionCreate()
@@ -60,49 +33,38 @@ class EdgeController extends BaseController
             throw new Exception("Error with unhandled edge!");
         }
 
-        if($model->save())
-            return json_encode($model);
+        if( $model->save())
+            return json_encode([
+                'id' => $model->id,
+                'weight' => $model->weight,
+                'node_first_id' => $model->node_first_id,
+                'node_second_id' => $model->node_second_id
+            ]);
         else
             throw new Exception();
     }
-//
-//    /**
-//     * Updates an existing Edge model.
-//     * If update is successful, the browser will be redirected to the 'view' page.
-//     * @param integer $id
-//     * @return mixed
-//     */
-//    public function actionUpdate($id)
-//    {
-//        $model = $this->findModel($id);
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        } else {
-//            return $this->render('update', [
-//                'model' => $model,
-//            ]);
-//        }
-//    }
-//
-    /**
-     * Deletes an existing Edge model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
+
+    public function beforeAction($action)
     {
-        return $this->findModel($id)->delete();
+        parent::beforeAction($action);
+
+        $graph_id =  Yii::$app->request->post('graph_id', Yii::$app->request->get('graph_id', -1));
+
+        $graph = Graph::findOne( $graph_id);
+
+        if( !$graph || $graph->user_id != self::getUserId())
+            throw new ForbiddenHttpException();
+        return
+            true;
     }
 
-    /**
-     * Finds the Edge model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Edge the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    public function actionDelete()
+    {
+        $edge_id = Yii::$app->request->post()["edge_id"];
+
+        return $this->findModel($edge_id)->delete();
+    }
+
     protected function findModel($id)
     {
         if (($model = Edge::findOne($id)) !== null) {

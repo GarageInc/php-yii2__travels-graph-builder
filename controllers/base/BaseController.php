@@ -59,7 +59,7 @@ class BaseController extends Controller
 
     public function getUserId(){
 
-        return $user_id =  Yii::$app->request->post('id', Yii::$app->request->get('id', -1));;
+        return $user_id =  Yii::$app->request->post('uid', Yii::$app->request->get('uid', -1));;
     }
 
     public function beforeAction($action)

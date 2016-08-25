@@ -51,7 +51,7 @@ class DijkstraAlgorithm
 
         return array(
             "length" => $U[$b][1],
-            "path" => implode('|', $path)
+            "path" => $path
         );
     }
 }

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\controllers\base\BaseController;
 use app\models\Edge;
+use app\models\Graph;
 use Yii;
 use app\models\Node;
 use yii\base\Exception;
@@ -13,45 +14,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * NodeController implements the CRUD actions for Node model.
- */
 class NodeController extends BaseController
 {
 
-
-//    /**
-//     * Lists all Node models.
-//     * @return mixed
-//     */
-//    public function actionIndex()
-//    {
-//        $dataProvider = new ActiveDataProvider([
-//            'query' => Node::find(),
-//        ]);
-//
-//        return $this->render('index', [
-//            'dataProvider' => $dataProvider,
-//        ]);
-//    }
-//
-//    /**
-//     * Displays a single Node model.
-//     * @param integer $id
-//     * @return mixed
-//     */
-//    public function actionView($id)
-//    {
-//        return $this->render('view', [
-//            'model' => $this->findModel($id),
-//        ]);
-//    }
-
-    /**
-     * Creates a new Node model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Node();
@@ -69,34 +34,26 @@ class NodeController extends BaseController
         else
             throw new Exception();
     }
-//
-//    /**
-//     * Updates an existing Node model.
-//     * If update is successful, the browser will be redirected to the 'view' page.
-//     * @param integer $id
-//     * @return mixed
-//     */
-//    public function actionUpdate($id)
-//    {
-//        $model = $this->findModel($id);
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        } else {
-//            return $this->render('update', [
-//                'model' => $model,
-//            ]);
-//        }
-//    }
 
-    /**
-     * Deletes an existing Node model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
+
+    public function beforeAction($action)
     {
+        parent::beforeAction($action);
+
+        $graph_id =  Yii::$app->request->post('graph_id', Yii::$app->request->get('graph_id', -1));
+
+        $graph = Graph::findOne( $graph_id);
+
+        if( !$graph || $graph->user_id != self::getUserId())
+            throw new ForbiddenHttpException();
+        return
+            true;
+    }
+
+    public function actionDelete()
+    {
+        $id = Yii::$app->request->post()["node_id"];
+
         $node = $this->findModel($id);
 
         $firstEdges = $node->getEdgesAsFirst()->all();
@@ -113,24 +70,16 @@ class NodeController extends BaseController
             $ids[] = $edge->getPrimaryKey();
         }
 
-        return json_encode( $ids);
+//        return json_encode( $ids);
 
-        Edge::deleteAll('id = :id', [':id' => $ids]);
+//        Edge::deleteAll('id = :id', [':id' => $ids]);
 
 
-//        Edge::deleteAll( array('in', 'id', $ids));
+        Edge::deleteAll( array('in', 'id', $ids));
 
-//        $node->delete();
-
+        return $node->delete();
     }
 
-    /**
-     * Finds the Node model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Node the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Node::findOne($id)) !== null) {
