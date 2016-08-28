@@ -37,9 +37,9 @@ class GraphController  extends BaseController
 
     public function beforeAction($action)
     {
-        $isGuest = $action->id=="index" || $action->id=="structure" || $action->id!="findpath";
+        $isCheckGuest = $action->id!="index" && $action->id!="structure" && $action->id!="findpath";
 
-        if( !$isGuest){
+        if( $isCheckGuest){
             $user_id =  self::getUserId();
             $pub_token =  Yii::$app->request->post('pub_token', Yii::$app->request->get('pub_token', -1));
 
@@ -49,9 +49,9 @@ class GraphController  extends BaseController
                 throw new ForbiddenHttpException();
         }
 
-        $notCheckGraph = $action->id == "create";
+        $isCheckGraph = $action->id!="index" && $action->id!="usergraphs" && $action->id != "create" && $action->id != "structure" && $action->id != "findpath";
 
-        if( $notCheckGraph ){
+        if( $isCheckGraph ){
 
             $graph_id =  Yii::$app->request->post('graph_id', Yii::$app->request->get('graph_id', -1));
 
